@@ -1,0 +1,38 @@
+# [Step Name]
+
+## Objective
+
+[Clear statement of what this step accomplishes]
+
+## Task
+
+[Detailed instructions for completing this step, tailored to its purpose.]
+
+### Process
+
+1. [Substep 1]
+2. [Substep 2]
+3. [Substep 3]
+
+[If this step has user inputs, explicitly say to ask structured questions.]
+
+## Output Format
+
+### [output_filename_1]
+
+[Description of what should be in this output file]
+
+**Structure**:
+```[file format]
+[Example or template of expected output]
+```
+
+## Quality Criteria
+
+- [Quality criterion 1]
+- [Quality criterion 2]
+- [Quality criterion 3]
+
+## Context
+
+[Explain why this step matters and how it fits into the workflow]

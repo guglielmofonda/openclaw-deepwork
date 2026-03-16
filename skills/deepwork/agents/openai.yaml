@@ -1,0 +1,3 @@
+interface:
+  display_name: "Deepwork Workflows"
+  short_description: "Define and run Deepwork-style workflows"

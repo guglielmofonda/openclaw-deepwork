@@ -1,0 +1,57 @@
+# Deepwork-Compatible Job Specification Template
+# Replace placeholders in [brackets] with actual values.
+
+name: [job_name]
+version: "1.0.0"
+summary: "[Brief one-line summary - max 200 chars]"
+common_job_info_provided_to_all_steps_at_runtime: |
+  [Shared context for all steps.
+  Include: problem, domain terms, constraints, audience.]
+
+workflows:
+  - name: [workflow_name]
+    summary: "[What this workflow accomplishes]"
+    steps:
+      - [step_id]
+      - [another_step]
+      # You may add arrays for concurrency, e.g. [step_a, step_b]
+
+steps:
+  - id: [step_id]
+    name: "[Step Name]"
+    description: "[What this step does]"
+    instructions_file: steps/[step_id].md
+    inputs:
+      - name: [param_name]
+        description: "[What user provides]"
+      # Or file input:
+      # - file: [filename_or_path]
+      #   from_step: [previous_step_id]
+    outputs:
+      [output_name]:
+        type: file
+        description: "[What this output contains]"
+        required: true
+    dependencies: []
+    reviews:
+      - run_each: step
+        quality_criteria:
+          "[Criterion Name]": "[Expected state statement]"
+    # Optional: delegate to agent
+    # agent: general-purpose
+
+  - id: [another_step]
+    name: "[Another Step]"
+    description: "[What this step does]"
+    instructions_file: steps/[another_step].md
+    inputs:
+      - file: [output_name]
+        from_step: [step_id]
+    outputs:
+      [another_output]:
+        type: file
+        description: "[What this output contains]"
+        required: true
+    dependencies:
+      - [step_id]
+    reviews: []
