@@ -9,6 +9,8 @@ metadata:
 
 Use this skill when a user wants to define or run a repeatable, multi-step workflow ("Deepwork-like" automation) with explicit steps, file outputs, and quality checks.
 
+For research/evaluation requests, do not jump from the first user prompt to a static questionnaire or directly to `job.yml`. Follow the interview loop below.
+
 ## Operating Modes
 
 Pick the smallest mode that satisfies the request.
@@ -24,13 +26,7 @@ If the user is vague, start with **Define**.
 
 1. Ask which repo/path should hold the workflow (default: current repo).
 2. **Define** using structured questions (see `references/define_questions.md`).
-   - If this is a research/evaluation request (e.g., “Is X net negative?”), use the fast path in
-     `references/research_starter.md` to propose a default workflow.
-   - If the user accepts the default research workflow, generate it immediately:
-
-```bash
-python3 skills/deepwork/scripts/generate_research_job.py --project-root .
-```
+   - If this is a research/evaluation request (e.g., “Is X net negative?”), use the interactive interview flow in `references/research_starter.md`.
 3. Create `.deepwork/jobs/<job_name>/job.yml` using `assets/job.yml.template`.
 4. **Implement** step instruction files using `assets/step_instruction.md.template`.
 5. **Run** the workflow (see Execution Rules below).
@@ -43,7 +39,34 @@ Follow `references/define_questions.md` and capture:
 - For each step: inputs, outputs, dependencies, process, quality checks
 - Review criteria for any step producing a final deliverable
 
-Then draft `job.yml` and confirm with the user before writing it.
+For research/evaluation jobs, use the interview controller instead of improvising the define loop in plain chat:
+
+```bash
+python3 skills/deepwork/scripts/deepwork_interview.py start --goal "<user prompt>" --project-root .
+```
+
+Show the returned `question_markdown` verbatim.
+
+When the user replies, continue with:
+
+```bash
+python3 skills/deepwork/scripts/deepwork_interview.py answer --state "<state_path>" --response "<user reply>"
+```
+
+Rules for this loop:
+- Ask exactly one scoping question per turn.
+- Keep the numbered menu format from the script output.
+- Always preserve the `Other: ...` path.
+- Do not generate `job.yml` until the interview reaches `ready_to_generate`.
+- When the script returns `ready_to_generate`, generate the workflow from that state:
+
+```bash
+python3 skills/deepwork/scripts/generate_research_job.py --state "<state_path>" --project-root .
+```
+
+Then start the runner.
+
+For non-research jobs, continue using the current generic define behavior.
 
 **Schema must be exact**: use `references/job_schema.md` (no extra fields).
 
@@ -115,6 +138,15 @@ python3 skills/deepwork/scripts/deepwork_runner.py finish-step --session <sessio
 If a review is required, the runner returns a review packet path and `needs_review` status.
 Read the packet, evaluate criteria, then re-run `finish-step` with `--review-pass` or `--review-fail`.
 
+For research/evaluation jobs, the normal sequence is:
+
+```bash
+python3 skills/deepwork/scripts/deepwork_interview.py start --goal "<user prompt>" --project-root .
+python3 skills/deepwork/scripts/deepwork_interview.py answer --state "<state_path>" --response "<user reply>"
+python3 skills/deepwork/scripts/generate_research_job.py --state "<state_path>" --project-root .
+python3 skills/deepwork/scripts/deepwork_runner.py start --job research_decision --workflow full_analysis --goal "<original goal>"
+```
+
 ## Files & Templates
 
 - `assets/job.yml.template` – job spec skeleton
@@ -123,3 +155,4 @@ Read the packet, evaluate criteria, then re-run `finish-step` with `--review-pas
 - `references/job_schema.md` – schema constraints
 - `references/define_questions.md` – structured question bank
 - `references/quality_and_patterns.md` – reviews, storage, concurrency, loops
+- `references/research_starter.md` – research interview flow and concern-steering rules

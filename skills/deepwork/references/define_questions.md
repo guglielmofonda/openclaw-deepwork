@@ -11,8 +11,8 @@ Ask in structured form:
    - What domain is this in (research, marketing, engineering, ops, etc.)?
    - How often will you run it?
 
-If the request is research/evaluation (e.g., “Is X net negative?”), propose the
-default workflow in `references/research_starter.md` and confirm it before customizing.
+If the request is research/evaluation (e.g., “Is X net negative?”), do not use a static question bundle.
+Use `references/research_starter.md` and drive the interview through the `deepwork_interview.py` script.
 2. **Success criteria**
    - What is the final deliverable?
    - Who is the audience?
@@ -64,6 +64,8 @@ If a step involves browsing, scraping, form filling, or UI interactions:
    - Job summary (<=200 chars)
    - Common job info (shared context for all steps)
    - Version (start at 1.0.0)
+
+For research/evaluation jobs, the user confirmation should happen after the interview script produces the scope summary and before `generate_research_job.py` is run.
 
 ## Step 4: Define Reviews
 

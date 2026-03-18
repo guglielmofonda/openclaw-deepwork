@@ -35,10 +35,22 @@ Inside OpenClaw, ask for a Deepwork-style research workflow, for example:
 `can you please run a deepwork to figure out if baby carrots are a net negative for me due to health concerns or not`
 
 The agent should:
-1. Ask structured scoping questions.
-2. Auto-generate the default `research_decision` job.
-3. Implement the step files.
-4. Run the workflow with reviews.
+1. Do a light grounding pass.
+2. Ask one numbered scoping question at a time, including `Other`.
+3. Re-steer the next question based on the user’s answer.
+4. Show a scope summary for confirmation.
+5. Generate `research_decision` from the confirmed interview state.
+6. Run the workflow with reviews.
+
+## Interview Flow
+
+The research path now uses an interview controller instead of a static questionnaire:
+
+```bash
+python3 skills/deepwork/scripts/deepwork_interview.py start --goal "<user prompt>" --project-root .
+python3 skills/deepwork/scripts/deepwork_interview.py answer --state "<state_path>" --response "<user reply>"
+python3 skills/deepwork/scripts/generate_research_job.py --state "<state_path>" --project-root .
+```
 
 ## Runner
 
