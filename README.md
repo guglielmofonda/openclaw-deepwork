@@ -9,7 +9,7 @@ Recommended install path if your OpenClaw workspace is `~/clawd`:
 ```bash
 cd ~
 git clone https://github.com/guglielmofonda/openclaw-deepwork.git
-python3 -m pip install --user -r ~/openclaw-deepwork/requirements.txt
+python3 -m pip install --user --break-system-packages -r ~/openclaw-deepwork/requirements.txt
 mkdir -p ~/clawd/skills
 rsync -a ~/openclaw-deepwork/skills/deepwork/ ~/clawd/skills/deepwork/
 ```
