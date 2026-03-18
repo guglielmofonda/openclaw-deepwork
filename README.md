@@ -57,3 +57,9 @@ python3 skills/deepwork/scripts/generate_research_job.py --state "<state_path>" 
 ```bash
 python3 skills/deepwork/scripts/deepwork_runner.py start --job research_decision --workflow full_analysis --goal "<goal>"
 ```
+
+## Inspiration
+
+This project is inspired by [Deepwork](https://github.com/Unsupervisedcom/deepwork) from Unsupervised.com, especially its Claude Code-oriented Define/Align workflow: light grounding research, interactive clarification, scoped job generation, and execution with review gates.
+
+The goal of this repo is to adapt that operating model into an OpenClaw-friendly skill and runner while keeping the same general standard for scoping depth and execution quality.
